@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surah Al-Fatiha Grammar Quiz</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f0f0; padding: 20px; }
+    .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1, h2, h3 { text-align: center; }
+    .word-preview { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+    .word-box { padding: 10px; border-radius: 12px; color: white; min-width: 100px; text-align: center; font-size: 18px; line-height: 1.6; }
+    .harf { background-color: #e67e22; }
+    .fiil { background-color: #2ecc71; }
+    .ism { background-color: #3498db; }
+    .btn { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; margin: 3px; }
+    .btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quran Quiz - 1 Surah Fatihah- The Opening</h1>
+    <div id="preview"></div>
+    <div id="score" style="text-align:center; font-size:18px; margin-top:10px;"></div>
+    <div id="quiz"></div>
+    <div id="summary"></div>
+  </div>
+  <script>
+const wordsByAyah = [
+  {
+    "number": 1,
+    "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+    "words": [
+      {
+        "text": "بِ",
+        "grammar": "harf",
+        "meaning": "In"
+      },
+      {
+        "text": "اسْمِ",
+        "grammar": "ism",
+        "meaning": "Name"
+      },
+      {
+        "text": "اللَّهِ",
+        "grammar": "ism",
+        "meaning": "ALLAH"
+      },
+      {
+        "text": "الرَّحْمَٰنِ",
+        "grammar": "ism",
+        "meaning": "The Most Gracious"
+      },
+      {
+        "text": "الرَّحِيمِ",
+        "grammar": "ism",
+        "meaning": "The Most Merciful"
+      }
+    ],
+    "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
+  },
+  {
+    "number": 2,
+    "text": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+    "words": [
+      {
+        "text": "الْحَمْدُ",
+        "grammar": "ism",
+        "meaning": "The Praise"
+      },
+      {
+        "text": "لِ",
+        "grammar": "harf",
+        "meaning": "For"
+      },
+      {
+        "text": "اللَّهِ",
+        "grammar": "ism",
+        "meaning": "ALLAH"
+      },
+      {
+        "text": "رَبِّ",
+        "grammar": "ism",
+        "meaning": "Lord"
+      },
+      {
+        "text": "الْعَالَمِينَ",
+        "grammar": "ism",
+        "meaning": "The Worlds"
+      }
+    ],
+    "translation": "All praise is for Allah, Lord of the Worlds"
+  },
+  {
+    "number": 3,
+    "text": "الرَّحْمَٰنِ الرَّحِيمِ",
+    "words": [
+      {
+        "text": "الرَّحْمَٰنِ",
+        "grammar": "ism",
+        "meaning": "The Most Gracious"
+      },
+      {
+        "text": "الرَّحِيمِ",
+        "grammar": "ism",
+        "meaning": "The Most Merciful"
+      }
+    ],
+    "translation": "The Most Gracious, the Most Merciful"
+  },
+  {
+    "number": 4,
+    "text": "مَالِكِ يَوْمِ الدِّينِ",
+    "words": [
+      {
+        "text": "مَالِكِ",
+        "grammar": "ism",
+        "meaning": "Master"
+      },
+      {
+        "text": "يَوْمِ",
+        "grammar": "ism",
+        "meaning": "Day"
+      },
+      {
+        "text": "الدِّينِ",
+        "grammar": "ism",
+        "meaning": "The Judgment"
+      }
+    ],
+    "translation": "Master of the Day of Judgment"
+  },
+  {
+    "number": 5,
+    "text": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+    "words": [
+      {
+        "text": "إِيَّا",
+        "grammar": "ism",
+        "meaning": "alone"
+      },
+      {
+        "text": "كَ",
+        "grammar": "ism",
+        "meaning": "you"
+      },
+      {
+        "text": "نَعْبُدُ",
+        "grammar": "fiil",
+        "meaning": "we worship"
+      },
+      {
+        "text": "وَ",
+        "grammar": "harf",
+        "meaning": "and"
+      },
+      {
+        "text": "إِيَّا",
+        "grammar": "ism",
+        "meaning": "alone"
+      },
+      {
+        "text": "كَ",
+        "grammar": "ism",
+        "meaning": "you"
+      },
+      {
+        "text": "نَسْتَعِينُ",
+        "grammar": "fiil",
+        "meaning": "we ask for help"
+      }
+    ],
+    "translation": "You alone we worship, and You alone we ask for help"
+  },
+  {
+    "number": 6,
+    "text": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+    "words": [
+      {
+        "text": "اهْدِ",
+        "grammar": "fiil",
+        "meaning": "Guide"
+      },
+      {
+        "text": "نَا",
+        "grammar": "ism",
+        "meaning": "us"
+      },
+      {
+        "text": "الصِّرَاطَ",
+        "grammar": "ism",
+        "meaning": "the path"
+      },
+      {
+        "text": "الْمُسْتَقِيمَ",
+        "grammar": "ism",
+        "meaning": "the straight"
+      }
+    ],
+    "translation": "Guide us to the Straight Path"
+  },
+  {
+    "number": 7,
+    "text": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+    "words": [
+      {
+        "text": "صِرَاطَ",
+        "grammar": "ism",
+        "meaning": "path"
+      },
+      {
+        "text": "الَّذِينَ",
+        "grammar": "ism",
+        "meaning": "those who"
+      },
+      {
+        "text": "أَنْعَمْتَ",
+        "grammar": "fiil",
+        "meaning": "You blessed"
+      },
+      {
+        "text": "عَلَيْ",
+        "grammar": "harf",
+        "meaning": "upon"
+      },
+      {
+        "text": "هِمْ",
+        "grammar": "ism",
+        "meaning": "them"
+      },
+      {
+        "text": "غَيْرِ",
+        "grammar": "harf",
+        "meaning": "not"
+      },
+      {
+        "text": "الْمَغْضُوبِ",
+        "grammar": "ism",
+        "meaning": "those who earned wrath"
+      },
+      {
+        "text": "عَلَيْ",
+        "grammar": "harf",
+        "meaning": "upon"
+      },
+      {
+        "text": "هِمْ",
+        "grammar": "ism",
+        "meaning": "them"
+      },
+      {
+        "text": "وَ",
+        "grammar": "harf",
+        "meaning": "and"
+      },
+{
+        "text": "لَا",
+        "grammar": "harf",
+        "meaning": "not"
+      },
+      {
+        "text": "الضَّالِّينَ",
+        "grammar": "ism",
+        "meaning": "those who went astray"
+      }
+    ],
+    "translation": "The path of those upon whom You have bestowed favor, not of those who have earned Your anger, nor of those who go astray"
+  }
+];
+
+let currentAyahIndex = 0;
+let currentWordIndex = 0;
+let correctCount = 0;
+let totalCorrect = 0;
+let mistakes = [];
+let ayahScores = [];
+
+function showPreview() {
+  const container = document.getElementById('preview');
+  container.innerHTML = '';
+  const ayah = wordsByAyah[currentAyahIndex];
+  const title = document.createElement('h3');
+  title.innerText = `Surah Al-Fatiha – Ayah ${ayah.number} (ٱلْفَاتِحَة آية ${ayah.number})`;
+  container.appendChild(title);
+
+  const row = document.createElement('div');
+  row.className = 'word-preview';
+  row.style.direction = 'rtl';
+  ayah.words.forEach(word => {
+    const div = document.createElement('div');
+    div.className = `word-box ${word.grammar}`;
+    div.innerHTML = `<strong>${word.text}</strong><br><span style="text-transform: lowercase;">${word.grammar}</span><br><span>${word.meaning}</span>`;
+    row.appendChild(div);
+  });
+  container.appendChild(row);
+
+  const arabic = document.createElement('div');
+  arabic.innerHTML = `<strong style='font-size: 24px;'>${ayah.text}</strong>`;
+  arabic.style.textAlign = 'center';
+  arabic.style.marginTop = '30px';
+  container.appendChild(arabic);
+
+  
+  const translation = document.createElement('div');
+  translation.innerHTML = `<em style='font-size: 18px;'>${ayah.translation}</em>`;
+  translation.style.textAlign = 'center';
+  translation.style.marginTop = '10px';
+  translation.style.marginBottom = '30px';
+  container.appendChild(translation);
+    
+
+  const startBtn = document.createElement('button');
+  startBtn.innerText = 'Start Quiz';
+  startBtn.className = 'btn';
+  startBtn.style.marginTop = '20px';
+  container.appendChild(startBtn);
+  startBtn.onclick = () => {
+    container.style.display = 'none';
+    showQuiz();
+  };
+}
+
+function showQuiz() {
+  let grammarAnswered = false;
+  let meaningAnswered = false;
+
+  const quizContainer = document.getElementById('quiz');
+  quizContainer.innerHTML = '';
+  const ayah = wordsByAyah[currentAyahIndex];
+  const word = ayah.words[currentWordIndex];
+
+  const card = document.createElement('div');
+  card.style.border = '1px solid #ccc';
+  card.style.borderRadius = '10px';
+  card.style.padding = '15px';
+  card.style.marginBottom = '20px';
+  card.innerHTML = `<h3 style='text-align:right;'>${word.text}</h3>`;
+
+  const grammarQ = document.createElement('div');
+  grammarQ.innerHTML = '<strong dir="ltr">What type of word is this?</strong><br>';
+  ['ism', 'fiil', 'harf'].forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.innerText = opt;
+    btn.onclick = () => {
+      if (!btn.clicked) {
+        btn.style.backgroundColor = opt === word.grammar ? '#2ecc71' : '#e74c3c';
+        btn.clicked = true;
+        grammarAnswered = true;
+        if (opt === word.grammar) {
+          correctCount++;
+          totalCorrect++;
+        } else {
+          mistakes.push({ word: word.text, question: 'Grammar type', correct: word.grammar });
+        }
+        tryNextStep();
+      }
+    };
+    grammarQ.appendChild(btn);
+  });
+  card.appendChild(grammarQ);
+
+  const meaningQ = document.createElement('div');
+  meaningQ.innerHTML = '<strong dir="ltr">What is the meaning of this word?</strong><br>';
+  const options = shuffle([word.meaning, 'peace', 'truth', 'God']);
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.innerText = opt;
+    btn.onclick = () => {
+      if (!btn.clicked) {
+        btn.style.backgroundColor = opt === word.meaning ? '#2ecc71' : '#e74c3c';
+        btn.clicked = true;
+        meaningAnswered = true;
+        if (opt === word.meaning) {
+          correctCount++;
+          totalCorrect++;
+        } else {
+          mistakes.push({ word: word.text, question: 'Meaning', correct: word.meaning });
+        }
+        tryNextStep();
+      }
+    };
+    meaningQ.appendChild(btn);
+  });
+  card.appendChild(meaningQ);
+
+  quizContainer.appendChild(card);
+  updateScore();
+
+  function tryNextStep() {
+    if (grammarAnswered && meaningAnswered) {
+      setTimeout(() => {
+        currentWordIndex++;
+        if (currentWordIndex < ayah.words.length) {
+          showQuiz();
+        } else {
+          document.getElementById('summary').innerHTML = '<h3>🎉 Well done! You completed Ayah ' + ayah.number + '!</h3>';
+          ayahScores.push({ ayah: ayah.number, score: correctCount });
+          currentWordIndex = 0;
+          if (currentAyahIndex + 1 < wordsByAyah.length) {
+            currentAyahIndex++;
+            document.getElementById('quiz').innerHTML = '';
+            document.getElementById('preview').style.display = 'block';
+            showPreview();
+          } else {
+            showFinalSummary();
+          }
+        }
+      }, 800);
+    }
+  }
+}
+
+function updateScore() {
+  document.getElementById('score').innerText = `Total Score: ${totalCorrect}`;
+}
+
+function showFinalSummary() {
+  let result = `<p>✅ You have completed all ayahs!</p><p><strong>Total Correct:</strong> ${totalCorrect}</p><h4>Score by Ayah:</h4><ul>`;
+  ayahScores.forEach(s => {
+    result += `<li>Ayah ${s.ayah}: ${s.score} correct</li>`;
+  });
+  result += '</ul>';
+  if (mistakes.length > 0) {
+    result += '<h4>Mistakes:</h4><ul>';
+    mistakes.forEach(m => {
+      result += `<li><strong>${m.word}</strong>: ${m.question} should be <em>${m.correct}</em></li>`;
+    });
+    result += '</ul>';
+  }
+  result += '<button onclick="location.reload()">Retry</button>';
+  result += '<button onclick="shareSummary()">Share</button>';
+  document.getElementById('summary').innerHTML = result;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function shareSummary() {
+  const text = `I just completed the Surah Al-Fatiha grammar quiz! Total correct: ${totalCorrect}. Try it too!`;
+  const url = encodeURIComponent(window.location.href);
+  const shareText = encodeURIComponent(text);
+  const wa = `https://wa.me/?text=${shareText}%20${url}`;
+  const fb = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+  const tw = `https://twitter.com/intent/tweet?text=${shareText}&url=${url}`;
+  const shareBox = document.createElement('div');
+  shareBox.innerHTML = `<p>Share your results:</p>
+    <a href='${wa}' target='_blank'>WhatsApp</a> |
+    <a href='${fb}' target='_blank'>Facebook</a> |
+    <a href='${tw}' target='_blank'>Twitter</a>`;
+  document.getElementById('summary').appendChild(shareBox);
+}
+
+showPreview();
+</script>
+</body>
+</html>
